@@ -216,9 +216,8 @@ button{transition:none;}
 button:active{transform:none;}
 .card-shake,.card-pulse,.card-enter,.star-pop,.map-enter{animation:none;opacity:1;}
 }
-.eagle-mascot{position:fixed;top:0;left:0;width:70px;height:41px;pointer-events:none;z-index:40;opacity:0;}
-.eagle-wing{transform-origin:55px 30px;animation:eagleFlap .4s ease-in-out infinite alternate;}
-@keyframes eagleFlap{from{transform:rotate(-24deg);}to{transform:rotate(16deg);}}
+.eagle-mascot{position:fixed;top:0;left:0;width:150px;height:140px;pointer-events:none;z-index:40;opacity:0;will-change:transform,opacity;}
+.eagle-sprite{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.22));}
 .eagle-mascot.flying-lr{animation:eagleFlyLR var(--eagle-duration,6s) linear forwards;}
 .eagle-mascot.flying-rl{animation:eagleFlyRL var(--eagle-duration,6s) linear forwards;}
 @keyframes eagleFlyLR{
@@ -255,7 +254,7 @@ button:active{transform:none;}
 <body>
 <button class="lang-btn" id="lang-btn" onclick="toggleLangMenu()">language</button>
 <div class="lang-menu" id="lang-menu"></div>
-<div class="eagle-mascot" id="eagle-mascot" aria-hidden="true"><svg viewBox="0 0 180 110" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><g class="eagle-wing"><path d="M78 48 C57 27 30 18 7 24 C27 29 39 42 56 56 C62 61 70 61 82 56 Z" fill="#6f4b2b" stroke="#2b2017" stroke-width="2"/><path d="M58 42 C39 31 22 28 9 29 M62 48 C43 40 28 39 16 40 M67 54 C49 49 37 50 25 52" fill="none" stroke="#a97949" stroke-width="2" opacity=".8"/></g><path d="M58 54 C65 39 84 31 106 35 C124 38 136 48 141 63 C132 75 112 82 91 78 C72 75 60 66 58 54 Z" fill="#5a3b23" stroke="#211810" stroke-width="2"/><path d="M76 55 C91 47 111 46 128 55 C116 63 101 67 84 64 Z" fill="#7d5430" opacity=".9"/><path d="M86 69 C99 60 116 60 130 65 C120 75 103 78 88 75 Z" fill="#3e2a1c"/><path d="M69 45 C73 31 84 21 99 20 C113 19 125 27 129 38 C123 48 112 54 99 55 C87 54 76 51 69 45 Z" fill="#f1eee3" stroke="#c9c2b2" stroke-width="1.5"/><path d="M78 39 C87 31 99 28 111 30 M75 44 C87 39 101 37 117 40 M82 49 C94 45 107 44 118 46" fill="none" stroke="#b8b1a3" stroke-width="1.5" opacity=".9"/><path d="M121 34 C132 29 143 32 148 40 C145 47 137 52 128 52 C123 48 120 42 121 34 Z" fill="#eeeae0"/><circle cx="137" cy="39" r="3.3" fill="#17130f"/><circle cx="138" cy="38" r="1" fill="#fff"/><path d="M146 42 L174 48 L147 55 C151 50 151 47 146 42 Z" fill="#d6a23a" stroke="#8d6520" stroke-width="1.5"/><path d="M67 49 C56 43 48 45 43 51 C52 52 58 57 64 62" fill="#eeeae0" stroke="#c9c2b2" stroke-width="1.2"/><path d="M86 77 C83 86 78 93 70 98 M96 79 C94 89 91 96 86 102 M108 77 C110 87 114 94 120 99" fill="none" stroke="#b98237" stroke-width="3" stroke-linecap="round"/><path d="M70 98 l-7 3 M70 98 l-4 6 M86 102 l-6 2 M86 102 l-2 6 M120 99 l6 4 M120 99 l2 6" stroke="#b98237" stroke-width="2" stroke-linecap="round"/></svg></div>
+<div class="eagle-mascot" id="eagle-mascot" aria-hidden="true"><img class="eagle-sprite" id="eagle-sprite" src="assets/animations/eagle_1.png" alt=""></div>
 <div class="wrap">
 
 <div class="brand-header"><img class="app-logo" src="./assets/logo-source.png" alt="Logo de Rumbo a la ciudadanía"><h1 id="h1-title">Rumbo a la ciudadanía</h1></div>
@@ -1535,18 +1534,38 @@ el.classList.add('show');
 if(toastTimer) clearTimeout(toastTimer);
 toastTimer=setTimeout(function(){ el.classList.remove('show'); },1700);
 }
+var eagleFrameTimer=null;
+var eagleFrame=0;
+function stopEagleAnimation(){
+if(eagleFrameTimer){ clearInterval(eagleFrameTimer); eagleFrameTimer=null; }
+}
+function startEagleAnimation(){
+var sprite=document.getElementById('eagle-sprite');
+if(!sprite) return;
+stopEagleAnimation();
+eagleFrame=0;
+sprite.src='assets/animations/eagle_1.png';
+eagleFrameTimer=setInterval(function(){
+eagleFrame=(eagleFrame+1)%12;
+sprite.src='assets/animations/eagle_'+(eagleFrame+1)+'.png';
+},95);
+}
 function flyEagle(){
 var el=document.getElementById('eagle-mascot');
 if(!el || REDUCE_MOTION) return;
 var dir = Math.random()<0.5 ? 'lr' : 'rl';
-var yPos = 40 + Math.random()*170;
+var yPos = 70 + Math.random()*150;
 var duration = 5 + Math.random()*2.5;
 el.style.setProperty('--eagle-y', yPos+'px');
 el.style.setProperty('--eagle-duration', duration+'s');
 el.classList.remove('flying-lr','flying-rl');
 void el.offsetWidth;
 el.classList.add(dir==='lr' ? 'flying-lr' : 'flying-rl');
-setTimeout(function(){ el.classList.remove('flying-lr','flying-rl'); }, duration*1000+150);
+startEagleAnimation();
+setTimeout(function(){
+el.classList.remove('flying-lr','flying-rl');
+stopEagleAnimation();
+}, duration*1000+150);
 }
 function scheduleEagle(){
 if(REDUCE_MOTION) return;
