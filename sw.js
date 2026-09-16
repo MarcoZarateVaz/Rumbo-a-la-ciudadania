@@ -1,4 +1,4 @@
-const CACHE="uncle-sam-says-pwa-v12";
+const CACHE="uncle-sam-says-pwa-v13";
 const ASSETS=[
   "./",
   "./index.html",

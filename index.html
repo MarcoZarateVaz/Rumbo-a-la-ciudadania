@@ -2514,7 +2514,7 @@ if(!REDUCE_MOTION){ setTimeout(flyEagle, 4000+Math.random()*3000); }
 scheduleEagle();
 
 
-/* ===== Rumbo a la ciudadanía v3 enhancement layer ===== */
+/* ===== Uncle Sam Says v3 enhancement layer ===== */
 (function(){'use strict';
 var K='rumbo_ciudadania_analytics_v2',D={schema:2,xp:0,answered:0,correct:0,wrong:0,totalTimeMs:0,sessionCount:0,examCount:0,examPasses:0,dailyChallengeDate:'',dailyChallengeDone:false,dailyChallengeBest:0,history:[],q:{},ach:{},settings:{sound:true,haptics:true,fontScale:1}},A,active=null,lastAnswerAt=0,installEvent=null;
 function cp(o){return JSON.parse(JSON.stringify(o));} function save(){try{localStorage.setItem(K,JSON.stringify(A));}catch(e){}} function load(){try{A=Object.assign(cp(D),JSON.parse(localStorage.getItem(K)||'null')||{});A.q=A.q||{};A.ach=A.ach||{};A.history=A.history||[];A.settings=Object.assign(cp(D.settings),A.settings||{});}catch(e){A=cp(D);}} load();
