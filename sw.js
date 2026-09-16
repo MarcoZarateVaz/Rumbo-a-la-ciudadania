@@ -1,4 +1,4 @@
-const CACHE="rumbo-ciudadania-pwa-v10";
+const CACHE="uncle-sam-says-pwa-v12";
 const ASSETS=[
   "./",
   "./index.html",
